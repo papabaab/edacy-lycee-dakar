@@ -1,27 +1,40 @@
 # LyceeDakar
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.8.
+## CONTEXT
+have the possibility to add classes in the system. For example: Terminal S1, Terminal S2, Terminal L1a, Terminal L2b. He can also modify or delete any information concerning the classes.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+To facilitate enrollment in his school, he would also like to have a part in the application where he can add students and put them in a specific class. For example. He can register his daughter Penda Sarr in Terminal s2.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Finally, for a first version of this platform he will need a part where he can list all the students and classes existing in his school.
 
-## Running unit tests
+## ASSIGNMENT
+WORK TO DO :
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Make an Angular page, for the moment no need to put a Backend
 
-## Running end-to-end tests
+Store the information in a table. The CRUD operations will be done in the table
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Put the project on Github
 
-## Further help
+Add on the Github project, a README file that documents the project
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Share the link of the Github project as an assignment
+
+## EXPLANATIONS
+  This angular app contains
+  1. a login page to allow only the admin to access the data of the school: For testing purposes, the username and the password are both 'admin'
+  > usernam: 'admin'
+  > password: 'admin'
+
+  2. then the admin has access to a list of classes on the left panel and its details on the right. There are buttons at the bottom left of the page if the admin wants to add a class or a student. On the details of each page, the admin can modify the details of the class, as well as the details of the students.
+
+  ## TALENT INFORMATION
+  PAPA AMADOU DIALLO
+  email: amadoux12@yahoo.fr
+  groupe: N / CODE-CRAFTERS
+
+  
