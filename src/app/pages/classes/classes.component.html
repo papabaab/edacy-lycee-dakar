@@ -1,0 +1,61 @@
+<main class ='flex-row'>
+  <div class="flex">
+    <!-- Left Part (Course List) -->
+    <div class="w-1/5 bg-gray-200 p-4">
+      <h2 class="text-lg font-bold mb-4">Course List</h2>
+      <ul>
+        <li *ngFor="let course of courses" (click)="selectCourse(course)" class="cursor-pointer flex justify-between items-center mb-2 px-2 py-1 bg-white shadow-md rounded">
+          <span>{{ course.name }}</span>
+          <span class="text-gray-500">
+            <svg  class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M6 4a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1V4zm0 5a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1V9zm0 5a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1v-2z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </li>
+      </ul>
+      <div class = 'addCourseDiv'>
+        <li id = 'addCourse' (click)="addCourse()" class="cursor-pointer w-200 flex justify-between items-center mb-2 px-2 py-1 bg-orange-300 shadow-md rounded">
+          <span class = 'text-white'>ADD A STUDENT</span>
+          <span class="text-gray-500">
+            <mat-icon class = 'text-white'>library_add</mat-icon>
+
+          </span>
+        </li>
+        <li id = 'addCourse' (click)="addClass()" class="cursor-pointer w-200 flex justify-between items-center mb-2 px-2 py-1 bg-blue-600 shadow-md rounded">
+          <span class = 'text-white'>ADD A CLASS</span>
+          <span class="text-gray-500">
+            <mat-icon class = 'text-white'>library_add</mat-icon>
+
+          </span>
+        </li>
+      </div>
+    </div>
+
+    <!-- Right Part (Course Details) -->
+    <div class="w-4/5 p-4">
+      <div *ngIf="selectedCourse && !isAddingEditingStudent" class="bg-white shadow-md rounded p-4">
+        <h2 class="text-lg font-bold mb-4">{{ selectedCourse.name }}</h2>
+        <p><strong>Start Date:</strong> {{ selectedCourse.startDate }}</p>
+        <p><strong>End Date:</strong> {{ selectedCourse.endDate }}</p>
+        <h3 class="text-lg font-bold mt-4">Students Enrolled:</h3>
+        <ul>
+          <li *ngFor="let student of selectedCourse.students" class="mb-2 w-2/6">{{ student.name }}
+            <mat-icon (click) = "editStudent(student, selectedCourse)" style = 'margin-left: 100px; display: inline-block; position: relative;'>edit</mat-icon>
+          </li>
+        </ul>
+        <!-- modify a class -->
+        <button [hidden]="isAddingEditingClass"  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" (click)="editClass(selectedCourse)">Modify Class</button>
+      </div>
+      <div *ngIf="isAddingEditingStudent" class = 'bg-white shadow-md rounded p-4"'>
+        <app-student-form (onCancel)="this.isAddingEditingStudent = false" [student]="selectedStudent" [courses]="courses" (editStudent)="editStudentInClass($event)" (newStudent)="addStudentToClass($event)"></app-student-form>
+      </div>
+
+      <div *ngIf="isAddingEditingClass" class = 'bg-white shadow-md rounded p-4"'>
+        <app-course-form (courseEditEvent)="onCourseEditAdd($event)" [course]="selectedCourse?selectedCourse:{ courseId : courses.length, name: '', startDate: '', endDate: '', students: []}" ></app-course-form>
+      </div>
+
+    </div>
+
+  </div>
+
+</main>

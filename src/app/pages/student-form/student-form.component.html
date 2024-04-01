@@ -1,0 +1,37 @@
+<div class="flex justify-center flex-col">
+  <h1 class="text-2xl font-bold mb-4 ml-12">{{ headerLabel }}</h1>
+  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" (ngSubmit)="addEditStudent()" #studentForm="ngForm">
+    <div class="mb-6">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+        FIRST NAME(S)
+      </label>
+      <input class="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+             id="firstname" type="text" placeholder="First Name(s)" name="firstname" [(ngModel)]="firstName" required>
+    </div>
+    <div class="mb-6">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="lastname">
+        LAST NAME
+      </label>
+      <input class="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+             id="lastname" type="text" placeholder="Last Name" name="lastname" [(ngModel)]="lastname" required>
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="course">
+        CLASS
+      </label>
+      <select class="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+             id="class" type="text" placeholder="class" name="class" [(ngModel)]="classCourse" required>
+              <option *ngFor="let course of courses" [value]="course.courseId">{{course.name}}</option>
+            </select>
+    </div>
+    <div class="flex items-center justify-between">
+      <button class="bg-blue-500 hover:bg-blue-700 disabled:bg-slate-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit" [disabled]="!studentForm.valid">
+        {{ butttonLabel }}
+      </button>
+      <button class="bg-red-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"> CANCEL
+</button>
+    </div>
+  </form>
+</div>
