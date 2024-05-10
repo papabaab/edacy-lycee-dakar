@@ -22,7 +22,7 @@
       </label>
       <select class="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
              id="class" type="text" placeholder="class" name="class" [(ngModel)]="classCourse" required>
-              <option *ngFor="let course of courses" [value]="course.courseId">{{course.name}}</option>
+              <option *ngFor="let course of courses" [value]="course.courseId">{{course.courseTitle}}</option>
             </select>
     </div>
     <div class="flex items-center justify-between">

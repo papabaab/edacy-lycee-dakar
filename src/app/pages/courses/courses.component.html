@@ -1,0 +1,216 @@
+
+
+<main class ='flex-row'>
+  <div class="flex">
+    <!-- Left Part (Course List) -->
+    <div  class="w-1/5 p-4 courseList ">
+      <h2 class="text-lg font-bold mb-4 uppercase text-white text-center">Course List</h2>
+      <ul>
+        <li *ngFor="let course of courses" (click)="selectCourse(course)" class="cursor-pointer flex justify-between items-center mb-2 px-2 py-1 bg-white shadow-md rounded">
+          <span [hidden]="isAddingEditingCourse">{{ course.courseTitle }}</span>
+          <span class="text-gray-500">
+            <svg  class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M6 4a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1V4zm0 5a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1V9zm0 5a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1v-2z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </li>
+        <li>
+           <button id = 'addCourse' (click)="addCourse()" class="h-10 cursor-pointer w-200 flex justify-between items-center mb-2 px-2 py-1 bg-white shadow-md rounded">
+          ADD A CLASS
+            <mat-icon class = 'text-white'>library_add</mat-icon>
+        </button>
+        </li>
+      </ul>
+      <!-- <div class = 'addCourseDiv'>
+
+      </div> -->
+    </div>
+
+    <!-- Right Part (Course Details) -->
+    <div class="w-4/5 p-4">
+      <div *ngIf="selectedCourse" class="bg-white rounded p-4">
+        <mat-card class = "w-full">
+          <mat-card-header class = 'w-full'>
+            <!-- COURSE TITLE -->
+            <mat-card-title>
+              <strong>COURSE TITLE: </strong> <span [hidden]="isAddingEditingCourse">{{ selectedCourse.courseTitle }}</span>
+              <mat-form-field *ngIf="isAddingEditingCourse">
+                <input required matInput type="text" placeholder="Course Title" [(ngModel)]="selectedCourse.courseTitle">
+                <button mat-button *ngIf="selectedCourse.courseTitle" matSuffix mat-icon-button aria-label="Clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+              </mat-card-title>
+
+            <!-- START DATE -->
+              <mat-card-subtitle><strong>START DATE: </strong> <span [hidden]="isAddingEditingCourse">{{ selectedCourse.startDate }}</span>
+                <mat-form-field *ngIf="isAddingEditingCourse">
+                  <input required matInput type="date" placeholder="Start Date" [(ngModel)]="selectedCourse.startDate">
+                  <button mat-button *ngIf="selectedCourse.startDate" matSuffix mat-icon-button aria-label="Clear">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </mat-card-subtitle>
+            <!-- END DATE -->
+              <mat-card-subtitle><strong>END DATE: </strong> <span [hidden]="isAddingEditingCourse">{{ selectedCourse.endDate }}</span>
+                <mat-form-field *ngIf="isAddingEditingCourse">
+                  <input required matInput type="date" placeholder="Start Date" [(ngModel)]="selectedCourse.endDate">
+                  <button mat-button *ngIf="selectedCourse.endDate" matSuffix mat-icon-button aria-label="Clear">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </mat-card-subtitle>
+                <!-- PROFESSOR NAME -->
+            <mat-card-title>
+              <strong>PROFESSOR: </strong> <span [hidden]="isAddingEditingCourse">{{ selectedCourse.professor }}</span>
+              <mat-form-field *ngIf="isAddingEditingCourse">
+                <input matInput type="text" placeholder="Professor" [(ngModel)]="selectedCourse.professor">
+                <button mat-button *ngIf="selectedCourse.professor" matSuffix mat-icon-button aria-label="Clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </mat-card-title>
+            </mat-card-header>
+            <!-- COURSE DESCRIPTION -->
+            <mat-card-content>
+            <strong>DESCRIPTION: </strong>
+            <p [hidden]="isAddingEditingCourse">{{ selectedCourse.description }}</p>
+            <mat-form-field description *ngIf="isAddingEditingCourse">
+              <textarea matInput type="text" placeholder="Description" [(ngModel)]="selectedCourse.description"></textarea>
+              <button mat-button *ngIf="selectedCourse.description" matSuffix mat-icon-button aria-label="Clear">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </mat-card-content>
+
+          <!-- ACTIONS -->
+          <mat-card-actions *ngIf="!isAddingEditingCourse" class = 'flex flex-row justify-end'>
+            <button  (click)="isAddingEditingCourse = true; isAddingEditingStudent = false; oldCourse = selectedCourse"
+            class = 'bg-blue-500 rounded-xl mx-2 px-2 text-white' mat-button>
+              EDIT
+              <mat-icon class = 'ml-1 rounded-xl inline-block relative -mb-1'>edit</mat-icon>
+            </button>
+            <button  class = 'bg-red-500 rounded-xl mx-2 px-2 text-white' mat-button>
+              DELETE
+              <mat-icon class = 'ml-1 inline-block relative -mb-1'>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+          <mat-card-actions *ngIf="isAddingEditingCourse" (click) = "confirmEditCourse()" class = 'flex flex-row justify-end'>
+            <button class = 'bg-blue-500 rounded-xl mx-2 px-2 text-white' confirm mat-button>
+              CONFIRM
+              <mat-icon class = 'ml-1 rounded-xl inline-block relative -mb-1'>check_circle</mat-icon>
+            </button>
+            <button (click)="selectedCourse= oldCourse; isAddingEditingCourse = false; isAddingEditingStudent = false"
+            class = 'bg-red-500 rounded-xl mx-2 px-2 text-white' mat-button>
+              CANCEL
+              <mat-icon class = 'ml-1 inline-block relative -mb-1'>cancel</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <!-- <ul>
+          <li *ngFor="let student of selectedCourse.students" class="mb-2 w-2/6">{{ student.name }}
+            <mat-icon (click) = "editStudent(student, selectedCourse)" style = 'margin-left: 100px; display: inline-block; position: relative;'>edit</mat-icon>
+          </li>
+        </ul> -->
+        <table class = "w-full p-8  mb-8">
+          <thead class="w-full">
+            <tr class = 'w-full'>
+              <th class = 'text-left p-2'>First Name(s)</th>
+              <th class = 'text-left p-2'>last Name</th>
+              <th class = 'text-left p-2'>Email</th>
+              <th class = 'text-left p-2'>Username</th>
+              <th class = 'text-left p-2'>
+        <button id = "addStudent"  (click)="addStudent()">ADD A STUDENT
+          <mat-icon class = 'text-white'>library_add</mat-icon>
+        </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="w-full" >
+          <!-- FIRST NAME -->
+
+          <tr class='w-full flex flex-row justify-between' *ngFor="let student of selectedCourse.students" class="mb-2 w-2/6">
+            <td ><span [hidden]="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">{{ student.firstName }}</span>
+                  <mat-form-field *ngIf="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">
+                  <input required matInput type="text" placeholder="First Name(s)" [(ngModel)]="student.firstName">
+                  <button mat-button *ngIf="student.firstName" matSuffix mat-icon-button aria-label="Clear">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+          </td>
+          <!-- LAST NAME -->
+            <td><span [hidden]="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">
+              {{ student.lastName?student.lastName:'NO LAST NAME' }}
+                </span>
+                <mat-form-field *ngIf="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">
+                  <input required matInput type="text" placeholder="Last Name" [(ngModel)]="student.lastName">
+                  <button mat-button *ngIf="student.lastName" matSuffix mat-icon-button aria-label="Clear">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                  </mat-form-field>
+              </td>
+
+            <!-- EMAIL -->
+            <td ><span [hidden]="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">{{ student.email?student.email:'NO EMAIL' }}
+             </span>
+              <mat-form-field *ngIf="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">
+                <input required matInput type="text" placeholder="Email" [(ngModel)]="student.email">
+                <button mat-button *ngIf="student.email" matSuffix mat-icon-button aria-label="Clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+                </mat-form-field>
+
+            </td>
+            <!-- USERNAME -->
+            <td ><span [hidden]="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">{{ student.email?student.username:'NO USERNAME' }}
+               </span>
+               <mat-form-field *ngIf="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">
+                <input required matInput type="text" placeholder="Username" [(ngModel)]="student.username">
+                <button mat-button *ngIf="student.username" matSuffix mat-icon-button aria-label="Clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+                </mat-form-field>
+
+            </td>
+
+            <!--  -->
+            <td [hidden]="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">
+              <button  (click) = "editStudent(student, selectedCourse)">
+                EDIT
+                <mat-icon class = 'ml-1 rounded-xl inline-block relative -mb-1'>edit</mat-icon>
+              </button>
+              <button (click) = "editStudent(student, selectedCourse)">
+                DELETE
+                <mat-icon class = 'ml-1 inline-block relative -mb-1'>delete</mat-icon>
+              </button>
+            </td>
+            <td [hidden]="!isAddingEditingStudent || selectedStudent?.studentId !== student.studentId">
+              <button  confirm [disabled]="!student.firstName || !student.lastName || !student.email || !student.username"  (click) = "confirmEditStudent(student, selectedCourse)">
+                CONFIRM
+                <mat-icon class = 'ml-1 rounded-xl inline-block relative -mb-1'>check_circle</mat-icon>
+              </button>
+              <button (click) = "cancelEditStudent(student)">
+                CANCEL
+                <mat-icon class = 'ml-1 inline-block relative -mb-1'>cancel</mat-icon>
+              </button>
+            </td>
+        </tr>
+      </tbody>
+
+        </table>
+        <!-- modify a class -->
+      </div>
+      <!-- <div *ngIf="isAddingEditingStudent" class = 'bg-white shadow-md rounded p-4"'>
+        <app-student-form (onCancel)="this.isAddingEditingStudent = false" [student]="selectedStudent" [courses]="courses" (editStudent)="editStudentInCourse($event)" (newStudent)="addStudentToCourse($event)"></app-student-form>
+      </div>
+
+      <div *ngIf="isAddingEditingCourse" class = 'bg-white shadow-md rounded p-4"'>
+        <app-course-form (courseEditEvent)="onCourseEditAdd($event)" [course]="selectedCourse?selectedCourse:{ courseId : courses.length, name: '', startDate: '', endDate: '', students: []}" ></app-course-form>
+      </div> -->
+
+    </div>
+
+  </div>
+
+</main>

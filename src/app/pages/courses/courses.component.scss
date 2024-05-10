@@ -1,0 +1,96 @@
+main{
+  height: 100vh;
+  .courseList{
+    // background-color: rgba(0, 119, 255, 0.973);
+    background: radial-gradient(circle, rgba(2,11,255,0.5354735644257703) 9%, rgba(0,14,120,1) 100%);
+
+
+  }
+  mat-card{
+    strong{
+      color: rgba(0, 119, 255, 0.973);
+      display: inline-block;
+      min-width: 150px;
+    }
+    mat-card-title, mat-card-subtitle{
+      padding: 3px 0;
+    }
+  }
+  button{
+    border-radius: 15px;
+    color: white;
+    text-transform: uppercase;
+    font-size: small;
+    padding: 3px 12px;
+    margin: 3px;
+
+      &:last-of-type{
+      background: linear-gradient(90deg, rgba(255, 0, 0, 0.569) 0%, rgba(147, 36, 36, 0.505) 100%);
+    }
+    &:first-of-type{
+      background: radial-gradient(circle, rgba(36,100,147,0.5746892507002801) 0%, rgba(13,38,172,0.5690870098039216) 99%);
+    }
+    &[confirm]{
+      background: linear-gradient(90deg, rgba(0, 255, 0, 0.569) 0%, rgba(0, 147, 36, 0.505) 100%);
+      --tw-bg-opacity: 1;
+      &:disabled{
+        --tw-bg-opacity: .1;
+        background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+      }
+    }
+  }
+  mat-form-field {
+    &[description]{width: 80%}
+    button{
+    padding: 0;
+  }
+}
+  table {
+    margin-top: 4rem;;
+    border-top: solid 1px lightgray;
+    tr{
+      min-height: 4rem;
+      height: 4rem;
+      box-shadow: 2px 2px 2px lightgrey;
+      margin-bottom: 3px;
+      border-left: solid 1px rgba(36,100,147,0.5746892507002801);
+      td,th{
+        padding: 1rem;
+        // &:first-of-type{border-left: solid 1px skyblue;}
+      }
+    } mat-icon{
+      max-height: 12px;
+      overflow: visible;
+      font-size: 1rem;
+      margin-bottom: -2px;
+    }
+    mat-form-field{
+      max-height: 4rem;
+      button{
+        margin-top: -12px;
+        mat-icon{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: auto;
+          max-height: fit-content;
+        }
+      }
+    }
+
+
+
+  }
+#addCourse{
+  width: 100%;
+}
+// #addStudent{
+//   right: 30px;
+//   position: absolute;
+// }
+
+}
+div.flex{
+  height: 100%;
+}
+

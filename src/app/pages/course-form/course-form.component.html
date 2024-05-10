@@ -1,12 +1,12 @@
 <div class="flex justify-center flex-col">
   <h1 class="text-2xl font-bold mb-4 ml-12">{{ headerLabel }}</h1>
-  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" (ngSubmit)="addModifyClassCourse()" #courseForm="ngForm">
+  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" (ngSubmit)="addModifyCourse()" #courseForm="ngForm">
     <div class="mb-6">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="class">
        CLASS LEVEL NAME
       </label>
       <input class="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-             id="class" minlength="2" type="text" placeholder="Class Name" name="class" [(ngModel)]="name" required>
+             id="class" minlength="2" type="text" placeholder="Course Name" name="class" [(ngModel)]="name" required>
     </div>
     <div class="mb-6">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">

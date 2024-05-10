@@ -19,7 +19,7 @@ export class LoginComponent {
     console.log('Password:', this.password);
     if(this.username === 'admin' && this.password === 'admin'){
       console.log('LOGIN SUCCESSFUL')
-      this.router.navigate(['classes']);
+      this.router.navigate(['courses']);
     }
   }
 

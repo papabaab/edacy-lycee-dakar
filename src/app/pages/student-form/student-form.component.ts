@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Course, Student } from '../models.interface';
+import { Course } from 'src/app/models/course.interface';
+import { Student } from 'src/app/models/student.interface';
 
 @Component({
   selector: 'app-student-form',
@@ -29,11 +30,11 @@ butttonLabel: string = 'ADD STUDENT';
 
   ngOnInit(): void {
       console.log("ALL COURSES: ", this.courses)
-      this.student?.name? this.headerLabel = 'EDIT STUDENT INFORMATION':''
-      this.student?.name? this.butttonLabel = 'EDIT STUDENT':''
-      if(this.student?.name){
-        this.firstName = this.student.name.split(' ')[0]
-        this.lastname = this.student.name.includes(' ')? this.student.name.split(' ')[1]:''
+      this.student?.firstName? this.headerLabel = 'EDIT STUDENT INFORMATION':''
+      this.student?.firstName? this.butttonLabel = 'EDIT STUDENT':''
+      if(this.student?.firstName){
+        this.firstName = this.student.firstName.split(' ')[0]
+        this.lastname = this.student.firstName.includes(' ')? this.student.firstName.split(' ')[1]:''
         this.classCourse = this.student.courseId
       }
   }
@@ -41,8 +42,8 @@ butttonLabel: string = 'ADD STUDENT';
 addEditStudent() {
   console.log('ADD EDIT STUDENT METHOD: ', this.firstName, this.lastname, this.classCourse, this.student)
   if (this.firstName && this.lastname && this.classCourse !== null) {
-    if(this.student?.name){
-      console.log('EDITING STUDENT: ', this.student.name)
+    if(this.student?.firstName){
+      console.log('EDITING STUDENT: ', this.student.firstName)
       this.editStudent.emit({oldStudent: this.student, newStudent: {
         name: `${this.firstName} ${this.lastname}`,
         courseId: this.classCourse
@@ -50,7 +51,7 @@ addEditStudent() {
 
     } else {
       this.newStudent.emit({
-      name: `${this.firstName} ${this.lastname}`,
+      firstName: `${this.firstName} ${this.lastname}`,
       courseId: this.classCourse
     })
     }
