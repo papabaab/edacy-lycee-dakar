@@ -6,8 +6,6 @@ import { CoursesComponent } from './courses/courses.component';
 import { RouterModule, Routes } from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { StudentFormComponent } from './student-form/student-form.component';
-import { CourseFormComponent } from './course-form/course-form.component';
 import {MatInputModule} from '@angular/material/input';
 
 
@@ -34,10 +32,7 @@ const ANGULAR_MAT_MODUES = [
 @NgModule({
   declarations: [
     LoginComponent,
-    CourseFormComponent,
     CoursesComponent,
-    StudentFormComponent,
-    CourseFormComponent,
   ],
   imports: [
     CommonModule,
@@ -48,8 +43,6 @@ const ANGULAR_MAT_MODUES = [
   exports: [
     LoginComponent,
     CoursesComponent,
-    CourseFormComponent,
-    StudentFormComponent,
   ]
 })
 export class PagesModule { }

@@ -8,6 +8,9 @@ import { CourseService } from 'src/app/services/course/course.service';
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss']
 })
+
+
+
 export class CoursesComponent implements OnInit {
 
 
@@ -16,8 +19,8 @@ export class CoursesComponent implements OnInit {
   oldCourse: Course | null | undefined= null;
   isAddingEditingStudent = false;
   isAddingEditingCourse = false;
-selectedStudent!: Student |null;
-oldStudent!: Student |null;
+  selectedStudent!: Student |null
+  oldStudent!: Student |null;
 
 
   constructor(private courseServices: CourseService) {
@@ -25,22 +28,40 @@ oldStudent!: Student |null;
   }
   ngOnInit(){
     this.courses = this.courseServices.getAllCourses()
+    this.selectedCourse = this.courses[0]
     console.log('ALL COURSES: ', this.courses)
+    console.log("SELECTED COURSE: ", this.selectedCourse)
   }
 
 
 addStudent() {
   this.isAddingEditingStudent = true
   this.isAddingEditingCourse = false
-  console.log('USER WANTS TO ADD A COURSE: ')
+  this.selectedStudent = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    username: '',
+    courseId: this.selectedCourse?.courseId
+  }
+  this.selectedCourse?.students.unshift(this.selectedStudent)
+  console.log('COMPONENT --> USER WANTS TO ADD A STUDENT: ', this.courses, this.courseServices.getAllCourses())
 }
 
 
 addCourse(){
-  this.selectedCourse = null
+  this.oldCourse = this.selectedCourse
+  this.selectedCourse = {
+    courseTitle:'',
+    startDate: '',
+    endDate: '',
+    courseId: 0,
+    students: []
+  }
   this.selectedStudent = null
   this.isAddingEditingCourse = true;
   this.isAddingEditingStudent = false
+  console.log("OLD COURSE: ", this.oldCourse)
 }
 
 
@@ -54,75 +75,53 @@ addCourse(){
 
 
 
-
-addStudentToCourse($event: any) {
-console.log('ADMIN WANTS TO ADD A STUDENT TO A CLASS: ', $event)
-this.isAddingEditingStudent = false;
- this.courses[$event.courseId].students.push($event)
- this.selectedCourse = this.courses.find(e=>e.courseId == $event.courseId)
- console.log("NEW STUDENT ADDED TO COURSE: ", this.courses[$event.courseId])
-}
-
-
-editStudentInCourse($event: any){
-  console.log('ADMIN WANTS TO EDIT A STUDENT IN CLASS: ', $event)
-  const student = $event.oldStudent;
-  const newStudent = $event.newStudent;
-  this.isAddingEditingStudent = false;
-  if(student.courseId !== newStudent.courseId){
-    this.courses[student.courseId].students.filter(e=>e.firstName!== student.name)
-    this.courses[newStudent.courseId].students.push(newStudent)
-    this.selectedCourse = this.courses.find(e=>e.courseId == newStudent.courseId)
-
-  } else {
-    let ind = student.courseId;
-
-    let s = this.courses[ind].students.findIndex(e=>e.firstName == student.name)
-    // console.log("S--->", s, ind, student.name, this.courses[ind], this.courses[ind].students[s])
-    this.courses[ind].students[s] = newStudent
-    this.selectedCourse = this.courses[ind]
-  }
-}
-
-onCourseEditAdd($event: any) {
-  console.log('ADMIN WANTS TO ADD A CLASS: ', $event)
-  this.isAddingEditingCourse = false;
-  this.isAddingEditingStudent = false;
-  const course : Course = $event;
-  if(this.courses.filter(e=>e.courseId == course.courseId)){
-    this.courses[course.courseId] = course;
-  } else this.courses.push(course)
-}
-
-
-
-confirmEditCourse(){
+  async confirmAddEditCourse(){
   this.isAddingEditingCourse = false;
   this.isAddingEditingStudent = false;
   this.oldCourse=null
   console.log("EDITED COURSE: ", this.selectedCourse?.courseId);
   console.log("ALL COURSES, AFTER EDIT: ", this.courses);
+
+  if(this.selectedCourse?.courseId){
+      this.courses = await this.courseServices.editCourse(this.selectedCourse as Course)
+      console.log('COMPONENT --> ADMIN WANTS TO EDIT A COURSE: ', this.courses)
+  } else  {
+    const result = await this.courseServices.addCourse(this.selectedCourse as Course)
+    this.selectedCourse = result.sort((a,b)=>a.courseId - b.courseId)[this.courses.length - 1]
+    // this.courses.push(this.selectedCourse)
+    console.log('COMPONENT --> ALL COURSES: ', result, this.selectedCourse)
+  }
+
 }
 
 
 
-editStudent(student: Student, course: Course) {
+editStudent(student: Student) {
   console.log('ADMIN WANTS TO EDIT STUDENT', student)
-
   this.selectedStudent = student;
   this.oldStudent = student;
   this.isAddingEditingStudent = true;
   this.isAddingEditingCourse = false;
-  this.selectedStudent.courseId = course.courseId
 
 }
 
-confirmEditStudent(student: Student, course: Course) {
-  console.log('ADMIN WANTS TO CONFIRM EDIT STUDENT', student, course)
+  async confirmAddEditStudent(student: Student) {
+  console.log('COMPONENT --> ADMIN WANTS TO CONFIRM EDIT STUDENT', student)
   this.selectedStudent = null;
   this.oldStudent = null;
   this.isAddingEditingStudent = false;
   this.isAddingEditingCourse = false;
+  if(student.studentId) {
+  const result = await this.courseServices.editStudent(student)
+  console.log('COMPONENT --> ADMIN WANTS TO CONFIRM EDIT STUDENT', this.courses)
+  this.courses = result
+
+} else {
+  const result = await this.courseServices.addStudentToCourse(student)
+  this.courses = result;
+  this.selectedCourse = this.courses.find(e=>e.courseId == student.courseId)
+  console.log("COMPONENT --> ADMIN ADDED A NEW STUDENT TO COURSE: ", this.courses)
+}
 
 }
 
@@ -136,5 +135,32 @@ cancelEditStudent(student: Student|null){
   this.isAddingEditingCourse = false;
   this.selectedStudent = null
   // this.oldStudent = null;
+}
+
+
+
+  async deleteStudent(student: Student) {
+  console.log('COMPONENT --> ADMIN WANTS TO DELETE A STUDENT: ', student)
+  if(!confirm('Are you sure you want to delete this student?')) return
+  const result = await this.courseServices.deleteStudentFromCourse(student)
+  this.courses = result;
+  this.selectedCourse = this.courses.find(e=>e.courseId == student.courseId)
+  console.log('COMPONENT --> ADMIN WANTS TO DELETE A STUDENT: ', this.selectedCourse)
+
+}
+
+
+
+
+
+
+
+  async deleteCourse(course: Course|null|undefined) {
+    if(!confirm('Are you sure you want to delete this course?')) return
+  const result = await this.courseServices.deleteSelectedCourse(course as Course)
+  this.courses = result;
+  this.selectedCourse = this.courses[0]
+  console.log('COMPONENT --> ADMIN WANTS TO DELETE A COURSE: ', result)
+
 }
 }
