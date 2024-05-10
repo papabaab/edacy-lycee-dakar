@@ -42,8 +42,10 @@ ng serve
 
 
   ## TALENT INFORMATION
-  PAPA AMADOU DIALLO
+  ````
+  Name: PAPA AMADOU DIALLO
   email: amadoux12@yahoo.fr
   groupe: N / CODE-CRAFTERS
+````
 
   
