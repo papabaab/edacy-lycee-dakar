@@ -217,7 +217,7 @@ allCourses: Course[] = COURSES
       this.allCourses[ind].students.splice(this.allCourses[ind].students.indexOf(student), 1)
       const lastStudent : Student = this.allCourses[ind].students.sort((e1, e2) => Number(e2.studentId) - Number(e1.studentId))[0]
       console.log('SERVICE: LAST STUDENT ID: ', lastStudent, 'index of course', ind)
-      this.allCourses[ind].students.unshift({...student, studentId: Number(lastStudent.studentId) + 1})
+      this.allCourses[ind].students.unshift({...student, studentId: lastStudent?Number(lastStudent.studentId) + 1:1})
       if(lastStudent.studentId) resolve(this.allCourses)
         else reject('SERVICE: ERROR ADDING A NEW STUDENT' + lastStudent)
     })
