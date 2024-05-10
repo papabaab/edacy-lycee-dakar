@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Course } from 'src/app/models/course.interface';
 import { Student } from 'src/app/models/student.interface';
 import { CourseService } from 'src/app/services/course/course.service';
@@ -23,7 +24,7 @@ export class CoursesComponent implements OnInit {
   oldStudent!: Student |null;
 
 
-  constructor(private courseServices: CourseService) {
+  constructor(private courseServices: CourseService, private router: Router) {
 
   }
   ngOnInit(){
@@ -162,5 +163,11 @@ cancelEditStudent(student: Student|null){
   this.selectedCourse = this.courses[0]
   console.log('COMPONENT --> ADMIN WANTS TO DELETE A COURSE: ', result)
 
+}
+
+
+logout() {
+  console.log("LOGINN OUT --> ")
+  this.router.navigate(['login'],{replaceUrl:true});
 }
 }

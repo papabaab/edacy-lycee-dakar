@@ -1,3 +1,9 @@
-div[login]{
+main{
   background: radial-gradient(circle, rgba(2,11,255,0.5354735644257703) 9%, rgba(0,14,120,1) 100%);
+  div[login]{
+    padding: 4rem;
+    border: solid white 1px;
+    border-radius: 4rem;
+    background: rgba(255,255,255, .25);
+  }
 }

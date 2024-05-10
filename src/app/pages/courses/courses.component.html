@@ -3,9 +3,9 @@
 <main class ='flex-row'>
   <div class="flex">
     <!-- Left Part (Course List) -->
-    <div  class="w-1/5 p-4 courseList ">
+    <div  class="w-1/5 p-4 courseList h-full relative">
       <h2 class="text-lg font-bold mb-4 uppercase text-white text-center">Course List</h2>
-      <ul>
+      <ul >
         <li [hidden]="isAddingEditingCourse" *ngFor="let course of courses" (click)="selectCourse(course)" class="cursor-pointer flex justify-between items-center mb-2 px-2 py-1 bg-white shadow-md rounded">
           <span >{{ course.courseTitle }}</span>
           <span class="text-gray-500">
@@ -15,12 +15,17 @@
           </span>
         </li>
         <li>
-           <button [disabled]="isAddingEditingCourse" id = 'addCourse' (click)="addCourse()" class="h-10 cursor-pointer w-200 flex justify-between items-center mb-2 px-2 py-1 bg-white shadow-md rounded">
+           <button [disabled]="isAddingEditingCourse" id = 'addCourse' (click)="addCourse()" class="shadow-white shadow-sm h-10 cursor-pointer w-200 flex justify-between items-center mb-2 px-2 py-1 bg-white shadow-md rounded">
           ADD A CLASS
             <mat-icon class = 'text-white'>library_add</mat-icon>
         </button>
         </li>
       </ul>
+
+      <button class="shadow-white shadow-sm cursor-pointer absolute rounded-xl bottom-10 left-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline" (click)="logout()">
+        LOGOUT
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
       <!-- <div class = 'addCourseDiv'>
 
       </div> -->
