@@ -32,6 +32,15 @@ Share the link of the Github project as an assignment
 
   2. then the admin has access to a list of classes on the left panel and its details on the right. There are buttons at the bottom left of the page if the admin wants to add a class or a student. On the details of each page, the admin can modify the details of the class, as well as the details of the students.
 
+## INSTALLATIONS
+```
+git clone https://github.com/papabaab/edacy-lycee-dakar.git
+cd edacy-lycee-dakar
+npm install
+ng serve
+```
+
+
   ## TALENT INFORMATION
   PAPA AMADOU DIALLO
   email: amadoux12@yahoo.fr
