@@ -1,5 +1,7 @@
 main{
-  background: radial-gradient(circle, rgba(2,11,255,0.5354735644257703) 9%, rgba(0,14,120,1) 100%);
+  // background: radial-gradient(circle, rgba(2,11,255,0.5354735644257703) 9%, rgba(0,14,120,1) 100%);
+  // background: radial-gradient(50% 50% at 50% 50%, #3E79E5 41.5%, #003465 100%);
+  background: radial-gradient(58.43% 103.88% at 56.74% 50%, #0085FF 0%, #003465 100%);
   div[login]{
     padding: 4rem;
     border: solid white 1px;
@@ -7,3 +9,5 @@ main{
     background: rgba(255,255,255, .25);
   }
 }
+
+
