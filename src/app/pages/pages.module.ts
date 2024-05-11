@@ -7,6 +7,9 @@ import { RouterModule, Routes } from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
+import { CourseService } from '../services/course/course.service';
+import { HttpClientModule } from '@angular/common/http';
+import { CourseResolver } from '../resolvers/course.resolver';
 
 
 
@@ -18,7 +21,10 @@ const routes: Routes = [{
 {path: '', redirectTo: 'login', pathMatch: 'full'},
 {
   path: 'courses',
-  component: CoursesComponent
+  component: CoursesComponent,
+  resolve: {
+    courses: CourseResolver
+  }
 },
 
 ]
@@ -37,12 +43,16 @@ const ANGULAR_MAT_MODUES = [
   imports: [
     CommonModule,
     FormsModule,
+    HttpClientModule,
     RouterModule.forChild(routes),
     ...ANGULAR_MAT_MODUES
   ],
   exports: [
     LoginComponent,
     CoursesComponent,
-  ]
+  ],
+  providers: [
+    CourseService,
+  ],
 })
 export class PagesModule { }

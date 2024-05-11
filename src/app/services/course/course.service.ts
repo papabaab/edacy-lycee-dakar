@@ -1,5 +1,8 @@
 
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { catchError, firstValueFrom, map, of, tap } from 'rxjs';
+import { environment } from 'src/app/environment/environment';
 import { Course } from 'src/app/models/course.interface';
 import { Student } from 'src/app/models/student.interface';
 const COURSES: Course[] = [
@@ -11,20 +14,20 @@ const COURSES: Course[] = [
     students: [
       {
         studentId: 1,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:5,
       },
       {
         studentId: 2,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:5,
       },
       {
         studentId: 3,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:5,
       },
     ]
@@ -37,20 +40,20 @@ const COURSES: Course[] = [
     students: [
       {
         studentId: 1,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:1,
       },
       {
         studentId: 2,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:1,
       },
       {
         studentId: 3,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:1,
       },
     ]
@@ -63,20 +66,20 @@ const COURSES: Course[] = [
     students: [
       {
         studentId: 1,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:2,
       },
       {
         studentId: 2,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:2,
       },
       {
         studentId: 3,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:2,
       },
     ]
@@ -89,20 +92,20 @@ const COURSES: Course[] = [
     students: [
       {
         studentId: 1,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:3,
       },
       {
         studentId: 2,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:3,
       },
       {
         studentId: 3,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:3,
       },
     ]
@@ -115,25 +118,26 @@ const COURSES: Course[] = [
     students: [
       {
         studentId: 1,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:4,
       },
       {
         studentId: 2,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:4,
       },
       {
         studentId: 3,
-        firstName: 'Alice',
-        lastName: "Wonderland",
+        firstname: 'Alice',
+        lastname: "Wonderland",
         courseId:4,
       },
     ]
   }
 ];
+const api = environment.api
 
 
 
@@ -146,12 +150,21 @@ allCourses: Course[] = COURSES
 
 
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
 
 
 
-  getAllCourses(){
+  async getAllCourses(): Promise<Course[]> {
+    const res = await firstValueFrom(this.httpClient.get<Course[]>(`${api}/courses`)
+    .pipe(tap((data) => console.log('SERVICE: ALL COURSES FROM API: ', data)),
+    map((data: any) => data.map((e:Course)=>{
+      e.startDate = this.formatDate(e.startDate)
+      e.endDate = this.formatDate(e.endDate)
+      return e
+    }) as Course[]),
+          catchError((err: HttpErrorResponse) => this.handleError(err))))
+    this.allCourses = res
     return this.allCourses
   }
 
@@ -159,78 +172,127 @@ allCourses: Course[] = COURSES
 
 
 
-  editCourse(course: Course): Promise<Course[]> {
+  async editCourse(course: Course): Promise<Course[]> {
     console.log('SERVICE: ADMIN WANTS TO EDIT A COURSE: ', course)
+
+    const result = await firstValueFrom(this.httpClient.put(`${api}/courses/${course.courseId}`, course)
+    .pipe(tap((data) => console.log('SERVICE: Course edited: ', data)),
+    catchError((err: HttpErrorResponse) => this.handleError(err))))
     this.allCourses = this.allCourses.filter(e=>e.courseId !== course.courseId)
-    this.allCourses.push(course)
-    return new Promise((resolve,reject)=>{
-      console.log("SERVICE: ALL COURSES: ", this.allCourses)
-      resolve(this.allCourses)
-    })
+    this.allCourses.push(result as Course)
+    return this.allCourses
+
   }
 
 
 
 
 
-  addCourse(course: Course): Promise<Course[]> {
+  async addCourse(course: Course): Promise<Course> {
     console.log('SERVICE: ADMIN WANTS TO ADD A COURSE: ', course)
-    this.allCourses.push({ ...course,courseId: this.allCourses.sort((e1, e2) => e1.courseId - e2.courseId)[this.allCourses.length - 1].courseId + 1 })
-    return new Promise((resolve,reject)=>{
-      console.log("SERVICE: ALL COURSES: ", this.allCourses)
-      resolve(this.allCourses)
-    })
+
+    const result = await firstValueFrom(this.httpClient.post(`${api}/courses`, course)
+    .pipe(tap((data) => console.log('SERVICE: Course added: ', data)),
+    map((data:any) => data['course'] as Course),
+    catchError((err: HttpErrorResponse) => this.handleError(err))))
+    this.allCourses.push(result as Course)
+    return result as Course
   }
 
 
 
 
-  deleteSelectedCourse(course: Course): Promise<Course[]> {
+  async deleteSelectedCourse(course: Course): Promise<Course[]> {
     console.log('SERVICE: ADMIN WANTS TO DELETE A COURSE: ', course)
     this.allCourses = this.allCourses.filter(e=>e.courseId !== course.courseId)
-    return new Promise((resolve,reject)=>{
-      resolve(this.allCourses)
-    })
-
-
+    // return new Promise((resolve,reject)=>{
+    //   resolve(this.allCourses)
+    // })
+    const result = await firstValueFrom(this.httpClient.delete(`${api}/courses/${course.courseId}`)
+    .pipe(tap((data) => console.log('SERVICE: Course deleted: ', data)),
+    catchError((err: HttpErrorResponse) => this.handleError(err))))
+    console.log('SERVICE: ADMIN WANTS TO DELETE A COURSE: ', result)
+    return this.allCourses
   }
 
 
 
-  editStudent(student: Student): Promise<Course[]> {
+  async editStudent(student: Student): Promise<Course[]> {
     console.log('SERVICE: ADMIN WANTS TO EDIT A STUDENT: ', student)
-    return new Promise((resolve,reject)=>{
+
       const ind = this.allCourses.indexOf(this.allCourses.find(e=>e.courseId == student.courseId) as Course)
-      this.allCourses[ind].students.filter(e=>e.studentId !== student.studentId)
-      this.allCourses[ind].students.push(student)
-      resolve(this.allCourses)
-    })
+      this.allCourses[ind].students = this.allCourses[ind]?.students?.filter(e=>e.studentId !== student.studentId)
+      this.allCourses[ind]?.students?.push(student)
+
+
+
+    const result = await firstValueFrom(
+      this.httpClient.put(`${api}/courses/${student.courseId}/students/${student.studentId}`,
+                          student)
+                            .pipe(tap((data) => console.log('SERVICE: student edited: ', data)),
+                                  catchError((err: HttpErrorResponse) => this.handleError(err)))
+                          )
+
+    console.log('SERVICE: ADMIN EDITED A STUDENT: ', result)
+
+    return this.allCourses
+
   }
 
 
 
 
-  addStudentToCourse(student: Student): Promise<Course[]> {
+  async addStudentToCourse(student: Student): Promise<Course[]> {
     console.log('SERVICE: ADMIN WANTS TO ADD A STUDENT TO A COURSE: ', student)
-    return new Promise((resolve,reject) => {
       const ind = this.allCourses.indexOf(this.allCourses.find(e=>e.courseId == student.courseId) as Course)
-      this.allCourses[ind].students.splice(this.allCourses[ind].students.indexOf(student), 1)
-      const lastStudent : Student = this.allCourses[ind].students.sort((e1, e2) => Number(e2.studentId) - Number(e1.studentId))[0]
-      console.log('SERVICE: LAST STUDENT ID: ', lastStudent, 'index of course', ind)
-      this.allCourses[ind].students.unshift({...student, studentId: lastStudent?Number(lastStudent.studentId) + 1:1})
-      if(lastStudent.studentId) resolve(this.allCourses)
-        else reject('SERVICE: ERROR ADDING A NEW STUDENT' + lastStudent)
-    })
+
+    const result = await firstValueFrom(this.httpClient.post(`${api}/courses/${student.courseId}/students`, student)
+    .pipe(tap((data) => console.log('SERVICE: student added: ', data)),
+    map((data:any) => data['student'] as Student),
+    catchError((err: HttpErrorResponse) => this.handleError(err))))
+    console.log('SERVICE: ADMIN ADDED A NEW STUDENT TO COURSE: ', result)
+    this.allCourses[ind].students?.unshift(result as Student)
+    return this.allCourses
   }
 
 
-  deleteStudentFromCourse(student: Student): Promise<Course[]> {
-    return new Promise((resolve,reject)=>{
+
+
+
+
+  async deleteStudentFromCourse(student: Student): Promise<Course[]> {
       const ind = this.allCourses.indexOf(this.allCourses.find(e=>e.courseId == student.courseId) as Course)
-       this.allCourses[ind].students = this.allCourses[ind].students.filter(e=>e.studentId !== student.studentId)
-        console.log('SERVICE --> admin wants to remove student from course: ', this.allCourses[ind].students)
-      resolve(this.allCourses)
-    })
+       this.allCourses[ind].students = this.allCourses[ind].students?.filter(e=>e.studentId !== student.studentId)
+
+    const result = await firstValueFrom(this.httpClient.delete(`${api}/courses/${student.courseId}/students/${student.studentId}`)
+    .pipe(tap((data) => console.log('SERVICE: student deleted: ', data)),
+    catchError((err: HttpErrorResponse) => this.handleError(err))))
+    console.log('SERVICE: ADMIN DELETED A STUDENT FROM COURSE: ', result)
+
+    return this.allCourses
   }
 
+
+
+
+  handleError(err:HttpErrorResponse) {
+    console.log('SERVICE: ERROR from server: ', err)
+    return of([])
+  }
+
+  private formatDate(date: Date|string) {
+ // Parse the date string using the French format
+ const [day, month, year] = (date as string).split('/');
+ const frenchDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)); // Months are 0-based in JavaScript
+ // Format the date using the English format
+ const englishDateString = this.refactorDate(frenchDate);
+ return englishDateString;
+  }
+
+  private refactorDate(date: Date) {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
 }

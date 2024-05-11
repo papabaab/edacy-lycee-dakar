@@ -50,7 +50,7 @@
             <!-- START DATE -->
               <mat-card-subtitle><strong>START DATE: </strong> <span [hidden]="isAddingEditingCourse">{{ selectedCourse?.startDate }}</span>
                 <mat-form-field *ngIf="isAddingEditingCourse">
-                  <input required matInput type="date" placeholder="Start Date" [(ngModel)]="selectedCourse!.startDate">
+                  <input required matInput type="date" placeholder="Start Date" [ngModel]="selectedCourse!.startDate">
                   <button mat-button *ngIf="selectedCourse?.startDate" matSuffix mat-icon-button aria-label="Clear">
                     <mat-icon>close</mat-icon>
                   </button>
@@ -131,21 +131,21 @@
           <!-- FIRST NAME -->
 
           <tr class='w-full flex flex-row justify-between' *ngFor="let student of selectedCourse!.students" class="mb-2 w-2/6">
-            <td ><span [hidden]="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">{{ student.firstName }}</span>
+            <td ><span [hidden]="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">{{ student.firstname }}</span>
                   <mat-form-field *ngIf="isAddingEditingStudent && (selectedStudent?.studentId == student.studentId || !student?.studentId)">
-                  <input required matInput type="text" placeholder="First Name(s)" [(ngModel)]="student.firstName">
-                  <button mat-button *ngIf="student.firstName" matSuffix mat-icon-button aria-label="Clear">
+                  <input required matInput type="text" placeholder="First Name(s)" [(ngModel)]="student.firstname">
+                  <button mat-button *ngIf="student.firstname" matSuffix mat-icon-button aria-label="Clear">
                     <mat-icon>close</mat-icon>
                   </button>
                 </mat-form-field>
           </td>
           <!-- LAST NAME -->
             <td><span [hidden]="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">
-              {{ student.lastName?student.lastName:'NO LAST NAME' }}
+              {{ student.lastname?student.lastname:'NO LAST NAME' }}
                 </span>
                 <mat-form-field *ngIf="isAddingEditingStudent && selectedStudent?.studentId == student.studentId">
-                  <input required matInput type="text" placeholder="Last Name" [(ngModel)]="student.lastName">
-                  <button mat-button *ngIf="student.lastName" matSuffix mat-icon-button aria-label="Clear">
+                  <input required matInput type="text" placeholder="Last Name" [(ngModel)]="student.lastname">
+                  <button mat-button *ngIf="student.lastname" matSuffix mat-icon-button aria-label="Clear">
                     <mat-icon>close</mat-icon>
                   </button>
                   </mat-form-field>
@@ -186,7 +186,7 @@
               </button>
             </td>
             <td [hidden]="!isAddingEditingStudent || selectedStudent?.studentId !== student.studentId">
-              <button  confirm [disabled]="!student.firstName || !student.lastName || !student.email || !student.username"  (click) = "confirmAddEditStudent(student)">
+              <button  confirm [disabled]="!student.firstname || !student.lastname || !student.email || !student.username"  (click) = "confirmAddEditStudent(student)">
                 CONFIRM
                 <mat-icon class = 'ml-1 rounded-xl inline-block relative -mb-1'>check_circle</mat-icon>
               </button>

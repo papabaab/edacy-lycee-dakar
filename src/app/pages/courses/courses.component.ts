@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from 'src/app/models/course.interface';
 import { Student } from 'src/app/models/student.interface';
 import { CourseService } from 'src/app/services/course/course.service';
@@ -22,16 +22,26 @@ export class CoursesComponent implements OnInit {
   isAddingEditingCourse = false;
   selectedStudent!: Student |null
   oldStudent!: Student |null;
+  SUBS: any;
 
 
-  constructor(private courseServices: CourseService, private router: Router) {
+  constructor(
+    private courseServices: CourseService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
 
   }
-  ngOnInit(){
-    this.courses = this.courseServices.getAllCourses()
-    this.selectedCourse = this.courses[0]
-    console.log('ALL COURSES: ', this.courses)
-    console.log("SELECTED COURSE: ", this.selectedCourse)
+  async ngOnInit(){
+    this.SUBS = this.activatedRoute.data.subscribe((data) => {
+      this.courses = data['courses'] as Course[]
+      this.selectedCourse = this.courses[0]
+      console.log('ALL COURSES: ', this.courses)
+      console.log("SELECTED COURSE: ", this.selectedCourse)
+    })
+    // this.courses = await this.courseServices.getAllCourses()
+    // this.selectedCourse = this.courses[0]
+    // console.log('ALL COURSES: ', this.courses)
+    // console.log("SELECTED COURSE: ", this.selectedCourse)
   }
 
 
@@ -39,13 +49,13 @@ addStudent() {
   this.isAddingEditingStudent = true
   this.isAddingEditingCourse = false
   this.selectedStudent = {
-    firstName: '',
-    lastName: '',
+    firstname: '',
+    lastname: '',
     email: '',
     username: '',
     courseId: this.selectedCourse?.courseId
   }
-  this.selectedCourse?.students.unshift(this.selectedStudent)
+  this.selectedCourse?.students?.unshift(this.selectedStudent)
   console.log('COMPONENT --> USER WANTS TO ADD A STUDENT: ', this.courses, this.courseServices.getAllCourses())
 }
 
@@ -56,7 +66,6 @@ addCourse(){
     courseTitle:'',
     startDate: '',
     endDate: '',
-    courseId: 0,
     students: []
   }
   this.selectedStudent = null
@@ -82,13 +91,14 @@ addCourse(){
   this.oldCourse=null
   console.log("EDITED COURSE: ", this.selectedCourse?.courseId);
   console.log("ALL COURSES, AFTER EDIT: ", this.courses);
+  delete this.selectedCourse?.['students']
 
   if(this.selectedCourse?.courseId){
       this.courses = await this.courseServices.editCourse(this.selectedCourse as Course)
       console.log('COMPONENT --> ADMIN WANTS TO EDIT A COURSE: ', this.courses)
   } else  {
     const result = await this.courseServices.addCourse(this.selectedCourse as Course)
-    this.selectedCourse = result.sort((a,b)=>a.courseId - b.courseId)[this.courses.length - 1]
+    this.selectedCourse = result
     // this.courses.push(this.selectedCourse)
     console.log('COMPONENT --> ALL COURSES: ', result, this.selectedCourse)
   }
@@ -105,6 +115,9 @@ editStudent(student: Student) {
   this.isAddingEditingCourse = false;
 
 }
+
+
+
 
   async confirmAddEditStudent(student: Student) {
   console.log('COMPONENT --> ADMIN WANTS TO CONFIRM EDIT STUDENT', student)
@@ -171,5 +184,11 @@ cancelEditStudent(student: Student|null){
 logout() {
   console.log("LOGINN OUT --> ")
   this.router.navigate(['login'],{replaceUrl:true});
+}
+
+
+ngOnDestroy() {
+  console.log("COURSES COMPONENT DESTROYED")
+  this.SUBS?.unsubscribe()
 }
 }
