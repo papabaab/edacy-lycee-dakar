@@ -20,7 +20,7 @@ export class CoursesComponent implements OnInit {
   oldCourse: Course | null | undefined= null;
   isAddingEditingStudent = false;
   isAddingEditingCourse = false;
-  selectedStudent!: Student |null
+  selectedStudent!: Student | null
   oldStudent!: Student |null;
   SUBS: any;
 

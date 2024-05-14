@@ -2,8 +2,8 @@
 export interface Student{
   firstname: string;
   lastname?: string;
-  studentId?: number,
+  studentId?: number | string,
   email?: string;
   username?: string
-  courseId?: number
+  courseId?: number | string
 }
