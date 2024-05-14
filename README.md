@@ -26,7 +26,7 @@ WORK TO DO :
   > password: 'admin'
 ```
   2. then the admin has access to a list of classes on the left panel and its details on the right. There are buttons at the bottom left of the page if the admin wants to add a class or a student. On the details of each page, the admin can modify the details of the class, as well as the details of the students.
-  3. To manipulate data in the app, you have to connect it download/clone the backend app and run it on the same server. [Link to backend server app](https://github.com/papabaab/api-edacy-lycee-dakar)
+  3. To manipulate data in the app, you have to connect it download/clone the backend app and run it on the same local machine. [Link to backend server app](https://github.com/papabaab/api-edacy-lycee-dakar)
      
 ## INSTALLATIONS
 ```
