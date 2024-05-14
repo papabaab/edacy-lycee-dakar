@@ -170,6 +170,17 @@ allCourses: Course[] = COURSES
 
 
 
+  async getStudentsInCourse(courseId: string|number): Promise<Student[]> {
+    const res = await firstValueFrom(this.httpClient.get<Course[]>(`${api}/courses/${courseId}/students`)
+    .pipe(tap((data) => console.log('SERVICE: ALL STUDENTS FROM API: ', data)),
+    map((data: any) => data.map((e:Course)=>{
+      return e
+    }) as Student[]), catchError((err: HttpErrorResponse) => this.handleError(err))))
+    return res
+  }
+
+
+
 
 
   async editCourse(course: Course): Promise<Course[]> {
@@ -242,17 +253,16 @@ allCourses: Course[] = COURSES
 
 
 
-  async addStudentToCourse(student: Student): Promise<Course[]> {
+  async addStudentToCourse(student: Student): Promise<Student> {
     console.log('SERVICE: ADMIN WANTS TO ADD A STUDENT TO A COURSE: ', student)
-      const ind = this.allCourses.indexOf(this.allCourses.find(e=>e.courseId == student.courseId) as Course)
+      // const ind = this.allCourses.indexOf(this.allCourses.find(e=>e.courseId == student.courseId) as Course)
 
     const result = await firstValueFrom(this.httpClient.post(`${api}/courses/${student.courseId}/students`, student)
     .pipe(tap((data) => console.log('SERVICE: student added: ', data)),
     map((data:any) => data['student'] as Student),
     catchError((err: HttpErrorResponse) => this.handleError(err))))
     console.log('SERVICE: ADMIN ADDED A NEW STUDENT TO COURSE: ', result)
-    this.allCourses[ind].students?.unshift(result as Student)
-    return this.allCourses
+    return result as Student
   }
 
 
@@ -282,8 +292,12 @@ allCourses: Course[] = COURSES
 
   private formatDate(date: Date|string) {
  // Parse the date string using the French format
- const [day, month, year] = (date as string).split('/');
- const frenchDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)); // Months are 0-based in JavaScript
+ if(date.toString().includes('-')) return date
+ const [first, month, last] = (date as string).split('/');
+ const frenchDate =
+ new Date(parseInt(first.length === 4 ? first : last),
+          parseInt(month) - 1,
+          parseInt(first.length === 4 ? last : first)); // Months are 0-based in JavaScript
  // Format the date using the English format
  const englishDateString = this.refactorDate(frenchDate);
  return englishDateString;

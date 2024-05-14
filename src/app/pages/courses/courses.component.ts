@@ -56,7 +56,7 @@ addStudent() {
     courseId: this.selectedCourse?.courseId
   }
   this.selectedCourse?.students?.unshift(this.selectedStudent)
-  console.log('COMPONENT --> USER WANTS TO ADD A STUDENT: ', this.courses, this.courseServices.getAllCourses())
+  console.log('COMPONENT --> USER WANTS TO ADD A STUDENT: ', this.selectedCourse)
 }
 
 
@@ -94,12 +94,12 @@ addCourse(){
   delete this.selectedCourse?.['students']
 
   if(this.selectedCourse?.courseId){
-      this.courses = await this.courseServices.editCourse(this.selectedCourse as Course)
-      console.log('COMPONENT --> ADMIN WANTS TO EDIT A COURSE: ', this.courses)
+      const result = await this.courseServices.editCourse(this.selectedCourse as Course)
+      console.log('COMPONENT --> ADMIN WANTS TO EDIT A COURSE: ', result)
+      this.selectedCourse.students = await this.courseServices.getStudentsInCourse(this.selectedCourse?.courseId as string)
   } else  {
     const result = await this.courseServices.addCourse(this.selectedCourse as Course)
     this.selectedCourse = result
-    // this.courses.push(this.selectedCourse)
     console.log('COMPONENT --> ALL COURSES: ', result, this.selectedCourse)
   }
 
@@ -132,9 +132,10 @@ editStudent(student: Student) {
 
 } else {
   const result = await this.courseServices.addStudentToCourse(student)
-  this.courses = result;
-  this.selectedCourse = this.courses.find(e=>e.courseId == student.courseId)
-  console.log("COMPONENT --> ADMIN ADDED A NEW STUDENT TO COURSE: ", this.courses)
+  // this.courses = result;
+  this.selectedCourse = this.courses.find(e=>e.courseId == result.courseId)
+  this.selectedCourse!.students = await this.courseServices.getStudentsInCourse(result?.courseId as string)
+  console.log("COMPONENT --> ADMIN ADDED A NEW STUDENT TO COURSE: ", this.selectedCourse)
 }
 
 }
@@ -158,14 +159,12 @@ cancelEditStudent(student: Student|null){
   if(!confirm('Are you sure you want to delete this student?')) return
   const result = await this.courseServices.deleteStudentFromCourse(student)
   this.courses = result;
-  this.selectedCourse = this.courses.find(e=>e.courseId == student.courseId)
   console.log('COMPONENT --> ADMIN WANTS TO DELETE A STUDENT: ', this.selectedCourse)
 
 }
 
 
 
-/* Container */
 
 
 
@@ -185,6 +184,9 @@ logout() {
   console.log("LOGINN OUT --> ")
   this.router.navigate(['login'],{replaceUrl:true});
 }
+
+
+
 
 
 ngOnDestroy() {

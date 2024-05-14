@@ -50,7 +50,7 @@
             <!-- START DATE -->
               <mat-card-subtitle><strong>START DATE: </strong> <span [hidden]="isAddingEditingCourse">{{ selectedCourse?.startDate }}</span>
                 <mat-form-field *ngIf="isAddingEditingCourse">
-                  <input required matInput type="date" placeholder="Start Date" [ngModel]="selectedCourse!.startDate">
+                  <input required matInput type="date" placeholder="Start Date" [(ngModel)]="selectedCourse!.startDate">
                   <button mat-button *ngIf="selectedCourse?.startDate" matSuffix mat-icon-button aria-label="Clear">
                     <mat-icon>close</mat-icon>
                   </button>
@@ -59,7 +59,7 @@
             <!-- END DATE -->
               <mat-card-subtitle><strong>END DATE: </strong> <span [hidden]="isAddingEditingCourse">{{ selectedCourse?.endDate }}</span>
                 <mat-form-field *ngIf="isAddingEditingCourse">
-                  <input required matInput type="date" placeholder="Start Date" [(ngModel)]="selectedCourse!.endDate">
+                  <input required matInput type="date" placeholder="End Date" [(ngModel)]="selectedCourse!.endDate">
                   <button mat-button *ngIf="selectedCourse?.endDate" matSuffix mat-icon-button aria-label="Clear">
                     <mat-icon>close</mat-icon>
                   </button>
