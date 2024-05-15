@@ -182,6 +182,7 @@ cancelEditStudent(student: Student|null){
 
 logout() {
   console.log("LOGINN OUT --> ")
+  localStorage.clear()
   this.router.navigate(['login'],{replaceUrl:true});
 }
 

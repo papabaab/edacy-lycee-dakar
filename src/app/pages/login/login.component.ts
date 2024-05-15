@@ -19,6 +19,7 @@ export class LoginComponent {
     console.log('Password:', this.password);
     if(this.username === 'admin' && this.password === 'admin'){
       console.log('LOGIN SUCCESSFUL')
+      localStorage.setItem("LOGIN", 'admin')
       this.router.navigate(['courses']);
     }
   }

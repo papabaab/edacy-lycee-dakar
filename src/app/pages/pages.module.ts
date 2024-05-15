@@ -10,6 +10,7 @@ import {MatInputModule} from '@angular/material/input';
 import { CourseService } from '../services/course/course.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CourseResolver } from '../resolvers/course.resolver';
+import { authGuard } from '../shared/guards/auth.guard';
 
 
 
@@ -22,6 +23,7 @@ const routes: Routes = [{
 {
   path: 'courses',
   component: CoursesComponent,
+  canActivate: [authGuard],
   resolve: {
     courses: CourseResolver
   }
