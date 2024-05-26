@@ -43,7 +43,7 @@ npm install
 
 - remarks: the default configuration is the development configuration which serves and connect to the rest api (view angular.json for more informations)
 
-  ## TALENT INFORMATION
+## TALENT INFORMATION
   ````
   Name: PAPA AMADOU DIALLO
   email: amadoux12@yahoo.fr
