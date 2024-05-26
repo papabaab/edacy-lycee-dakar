@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from 'src/app/models/course.interface';
 import { Student } from 'src/app/models/student.interface';
-import { CourseService } from 'src/app/services/course/course.service';
+import { CourseService } from 'src/app/services/course/course.abstract.service';
 
 @Component({
   selector: 'app-courses',
@@ -26,7 +27,7 @@ export class CoursesComponent implements OnInit {
 
 
   constructor(
-    private courseServices: CourseService,
+    @Inject(CourseService) private courseServices: CourseService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
 
@@ -100,7 +101,7 @@ addCourse(){
   } else  {
     const result = await this.courseServices.addCourse(this.selectedCourse as Course)
     this.selectedCourse = result
-    console.log('COMPONENT --> ALL COURSES: ', result, this.selectedCourse)
+    console.log('COMPONENT --> ALL COURSES: ', result, this.courses)
   }
 
 }
@@ -132,10 +133,10 @@ editStudent(student: Student) {
 
 } else {
   const result = await this.courseServices.addStudentToCourse(student)
-  // this.courses = result;
-  this.selectedCourse = this.courses.find(e=>e.courseId == result.courseId)
-  this.selectedCourse!.students = await this.courseServices.getStudentsInCourse(result?.courseId as string)
-  console.log("COMPONENT --> ADMIN ADDED A NEW STUDENT TO COURSE: ", this.selectedCourse)
+  // this.selectedCourse?.students?.unshift(student)
+  // this.selectedCourse = this.courses.find(e=>e.courseId == result.courseId)
+  // this.selectedCourse!.students = await this.courseServices.getStudentsInCourse(result?.courseId as string)
+  console.log("COMPONENT --> ADMIN ADDED A NEW STUDENT TO COURSE: ", result)
 }
 
 }

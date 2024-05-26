@@ -57,18 +57,39 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "development-graphql": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.graphql.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+
           "configurations": {
             "production": {
               "browserTarget": "lycee-dakar:build:production"
             },
             "development": {
               "browserTarget": "lycee-dakar:build:development"
+            },
+            "rest": {
+              "browserTarget": "lycee-dakar:build:development"
+            },
+            "graphql": {
+              "browserTarget": "lycee-dakar:build:development-graphql"
             }
           },
           "defaultConfiguration": "development"
